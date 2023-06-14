@@ -76,6 +76,9 @@ const CreateAnimal = () => {
                 <Link href="/createSpecies">
                     <button>create Species</button>
                 </Link>
+                <Link href="/viewAllAnimal">
+                    <button>View Animal</button>
+                </Link>
 
                 <button type="submit">Create Animal</button>
             </form>

@@ -89,6 +89,9 @@ const CreateEmployee = () => {
                 <Link href="/userPage">
                     <button type="submit">Return to user</button>
                 </Link>
+                <Link href="/viewEmployee">
+                    <button type="submit">View Employee</button>
+                </Link>
             </form>
         </div>
     );

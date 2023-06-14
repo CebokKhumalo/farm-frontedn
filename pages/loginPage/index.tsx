@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 const LoginPage = () => {
-    const [email, setEmail] = useState('');
+    const [emailOrEmail, setEmailOrEmail] = useState('');
     const [password, setPassword] = useState('');
     const router = useRouter();
 
@@ -13,19 +13,21 @@ const LoginPage = () => {
 
         try {
             const response = await axios.get(
-                `https://localhost:44311/api/services/app/Person/GetAsyncByEmailAndPassword?email=${email}&password=${password}`
+                `https://localhost:44311/api/services/app/Person/GetAsyncByUsenameOrEmailAndPassword?userNameOrEmail=${emailOrEmail}&password=${password}`
             );
 
             const user = response.data.result;
             if (user) {
                 const userId = user.id;
                 router.push(`/userPage?id=${userId}`);
-                console.log('Email:', email);
+                console.log('Email:', emailOrEmail);
                 console.log('password:', password);
             } else {
                 window.alert(
                     'Credentials incorrect. Please re-enter your credentials.'
                 );
+                console.log('Email:', emailOrEmail);
+                console.log('password:', password);
             }
         } catch (error) {
             console.log(error);
@@ -69,14 +71,15 @@ const LoginPage = () => {
                         padding: '1rem',
                     }}
                 >
-                    <label htmlFor="username">UserName:</label>
+                    <label htmlFor="username">Username or Password:</label>
                     <input
                         type="text"
-                        id="username"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        id="emailOrEmail"
+                        value={emailOrEmail}
+                        onChange={(e) => setEmailOrEmail(e.target.value)}
                     />
                 </div>
+
                 <div
                     style={{
                         display: 'flex',

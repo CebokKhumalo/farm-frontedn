@@ -1,16 +1,16 @@
-import axios from 'axios';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const ViewEmployee = () => {
-    const [employees, setEmployees] = useState([]);
+const ViewAllAnimal = () => {
+    const [allAnimal, setAllAnimal] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const token = localStorage.getItem('token');
                 const response = await axios.get(
-                    'https://localhost:44311/api/services/app/Person/GetAll',
+                    'https://localhost:44311/api/services/app/Animal/GetAll',
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -18,10 +18,11 @@ const ViewEmployee = () => {
                     }
                 );
 
+                // Extract enclosure data from the response and update the state
                 const data = response.data;
-                setEmployees(data.result);
+                setAllAnimal(data.result);
             } catch (error) {
-                console.error('Error:', error);
+                console.log(error);
             }
         };
 
@@ -30,26 +31,24 @@ const ViewEmployee = () => {
 
     return (
         <div>
-            <h1>Employee List</h1>
+            <h1>Animal List</h1>
             <table>
                 <thead>
                     <tr>
-                        <th>Username</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Get Enclosure</th>
+                        <th>animal Name</th>
+                        <th>age</th>
+                        <th></th>
                         {/* Add more table headers for additional fields */}
                     </tr>
                 </thead>
                 <tbody>
-                    {employees.map((person) => (
-                        <tr key={person.id}>
-                            <td>{person.userName}</td>
-                            <td>{person.name}</td>
-                            <td>{person.email}</td>
+                    {allAnimal.map((animal) => (
+                        <tr key={animal.id}>
+                            <td>{animal.animalName}</td>
+                            <td>{animal.age}</td>
                             <td>
-                                <Link href={`/userPage?id=${person.id}`}>
-                                    <button>get enclosure details</button>
+                                <Link href={`/viewAnimal?id=${animal.id}`}>
+                                    <button>get Animal details</button>
                                 </Link>
                             </td>
                             {/* Add more table cells for additional fields */}
@@ -58,11 +57,11 @@ const ViewEmployee = () => {
                 </tbody>
             </table>
 
-            <Link href="createEmployee">
-                <button>Create New Employee</button>
+            <Link href="createAnimal">
+                <button>Create New Animal</button>
             </Link>
         </div>
     );
 };
 
-export default ViewEmployee;
+export default ViewAllAnimal;

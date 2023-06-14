@@ -19,5 +19,5 @@ export const createPersonRequestAction = createAction<
 
 export const getAllPersonRequestAction = createAction<
     IPersonStateContext,
-    IPerson
->(PersonActionEnum.createPersonRequest, (GetAllUser) => ({ GetAllUser }));
+    IPerson[]
+>(PersonActionEnum.getAllPersonRequest, (GetAllUser) => ({ GetAllUser }));

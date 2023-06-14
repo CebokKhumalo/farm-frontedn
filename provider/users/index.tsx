@@ -22,7 +22,7 @@ import {
 const PersonProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
     const [state, dispatch] = useReducer(PersonReducer, INITIAL_STATE);
 
-    const getPerson = async () => {
+    const getAllUser = async () => {
         const token = localStorage.getItem('token');
         const response = await fetch(
             'https://localhost:44311/api/services/app/Person/GetAll',
@@ -67,9 +67,10 @@ const PersonProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 
     return (
         <PersonContext.Provider value={state}>
-            <PersonActionContext.Provider value={{ createUser, getPerson }}>
+            <PersonActionContext.Provider value={{ createUser, getAllUser }}>
                 {children}
             </PersonActionContext.Provider>
         </PersonContext.Provider>
     );
 };
+export { PersonContext };
