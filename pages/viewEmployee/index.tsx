@@ -51,6 +51,9 @@ const ViewEmployee = () => {
                                 <Link href={`/userPage?id=${person.id}`}>
                                     <button>get enclosure details</button>
                                 </Link>
+                                <Link href={`/updateEmployee?id=${person.id}`}>
+                                    <button>Update Employee details</button>
+                                </Link>
                             </td>
                             {/* Add more table cells for additional fields */}
                         </tr>
