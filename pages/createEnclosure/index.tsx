@@ -1,19 +1,21 @@
 import axios from 'axios';
-import Link from 'next/link';
-import React, { useState } from 'react';
+import { Form, Input, Button, Card, Space, Modal, Typography } from 'antd';
+import { LinkOutlined, SearchOutlined } from '@ant-design/icons';
+import { useState } from 'react';
+import styles from './createEnclo.module.css';
+import { Enclosure } from '../../interfaces';
+import Layouts from '../../components/Layout';
 
-interface User {
-    enclosureName: string;
-    currentCapacity: number;
-    maxCapacity: number;
-}
+const { Text, Title } = Typography;
 
 const CreateEnclosure = () => {
-    const [enclosureData, setEnclosureData] = useState<User | null>(null);
+    const [enclosureData, setEnclosureData] = useState<Enclosure>({
+        enclosureName: '',
+        currentCapacity: 0,
+        maxCapacity: 0,
+    });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-
         const { name, value } = e.target;
         setEnclosureData((prevData) => ({
             ...prevData,
@@ -21,64 +23,111 @@ const CreateEnclosure = () => {
         }));
     };
 
-    const handleCreate = async (e: React.FormEvent) => {
-        e.preventDefault();
-
+    const handleCreate = async () => {
         try {
             const response = await axios.post(
                 `https://localhost:44311/api/services/app/Enclosure/CreateEnclosure`,
-                enclosureData
+                enclosureData,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
             );
-            const newEnclosure: User = response.data.result;
+            const newEnclosure: Enclosure = response.data.result;
+            console.log('New enclosure created:', newEnclosure);
+
             setEnclosureData({
                 enclosureName: '',
                 currentCapacity: 0,
                 maxCapacity: 0,
             });
-            console.log('New enclosure created:', newEnclosure);
+
+            // Display success message and refresh the page
+            Modal.success({
+                content: 'New enclosure created successfully!',
+                onOk: () => window.location.reload(),
+            });
         } catch (error) {
             console.log(error);
+
+            // Show error message
+            Modal.error({
+                content: 'Failed to create new enclosure.',
+            });
         }
     };
 
     return (
-        <div>
-            <h1>Create Enclosure</h1>
-            <form onSubmit={handleCreate}>
-                <div>
-                    <label htmlFor="enclosureName">enclosureName:</label>
-                    <input
-                        type="text"
-                        id="enclosureName"
-                        name="enclosureName"
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="currentCapacity">currentCapacity:</label>
-                    <input
-                        type="text"
-                        id="currentCapacity"
-                        name="currentCapacity"
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="maxCapacity">maxCapacity:</label>
-                    <input
-                        type="text"
-                        id="maxCapacity"
-                        name="maxCapacity"
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <button type="submit">Create Enclosure</button>
+        <Layouts>
+            <div className={styles.background}>
+                <div className={styles.container}>
+                    <Card className={styles.card}>
+                        <Title>Create a New Enclosure</Title>
+                        <Form
+                            onFinish={handleCreate}
+                            className={styles.cardInformation}
+                        >
+                            <Form.Item name="enclosureName">
+                                <Input
+                                    placeholder="Enter the Enclosure Name"
+                                    type="text"
+                                    name="enclosureName"
+                                    value={enclosureData?.enclosureName}
+                                    onChange={handleInputChange}
+                                />
+                            </Form.Item>
 
-                <Link href="/viewAllEnclosure">
-                    <button type="submit">View Enclosure</button>
-                </Link>
-            </form>
-        </div>
+                            <Form.Item name="currentCapacity">
+                                <Input
+                                    placeholder="Enter the Current capacity of the Enclosure"
+                                    type="number"
+                                    name="currentCapacity"
+                                    value={enclosureData?.currentCapacity}
+                                    onChange={handleInputChange}
+                                />
+                            </Form.Item>
+
+                            <Form.Item name="maxCapacity">
+                                <Input
+                                    placeholder="Enter the Maximum capacity of the Enclosure"
+                                    type="number"
+                                    name="maxCapacity"
+                                    value={enclosureData?.maxCapacity}
+                                    onChange={handleInputChange}
+                                />
+                            </Form.Item>
+
+                            <Form.Item>
+                                <Space>
+                                    <Button
+                                        className={styles.buttons}
+                                        type="link"
+                                        icon={<SearchOutlined />}
+                                        htmlType="submit"
+                                    >
+                                        <Text className={styles.buttonText}>
+                                            Create Enclosure
+                                        </Text>
+                                    </Button>
+                                    <Button
+                                        className={styles.buttons}
+                                        type="link"
+                                        icon={<LinkOutlined />}
+                                        href="/viewAllEnclosure"
+                                    >
+                                        <Text className={styles.buttonText}>
+                                            {' '}
+                                            View Enclosure
+                                        </Text>
+                                    </Button>
+                                </Space>
+                            </Form.Item>
+                        </Form>
+                    </Card>
+                </div>
+            </div>
+        </Layouts>
     );
 };
 

@@ -8,9 +8,10 @@ export function PersonReducer(
     const { type, payload } = action;
 
     switch (type) {
-        case PersonActionEnum.loginUserRequest:
-        case PersonActionEnum.createPersonRequest:
         case PersonActionEnum.getAllPersonRequest:
+        case PersonActionEnum.createPersonRequest:
+        case PersonActionEnum.loginUserRequest:
+        case PersonActionEnum.getPersonByIdRequest:
             return { ...incomingState, ...payload };
 
         default:

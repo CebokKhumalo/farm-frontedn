@@ -1,73 +1,78 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import Layout from '../../components/Layout';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-interface User {
-    id: string;
-    enclosureName: string;
-    currentCapacity: number;
-    maxCapacity: number;
-}
+import styles from './styles.module.css';
+import { Card, Button, Typography, Space } from 'antd';
+import { IEnclosure } from '../../provider/enclosure/context';
+import { useEnclosure } from '../../provider/enclosure';
+
+const { Text, Title } = Typography;
 
 const ViewEnclosure = () => {
-    const [viewEnclosure, setViewEnclosure] = useState<User | null>(null);
+    const [viewEnclosure, setViewEnclosure] = useState<IEnclosure | null>(null);
+    const { getEnclosureById, EnclosureById } = useEnclosure();
     const router = useRouter();
     const { id } = router.query;
 
     useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await axios.get(
-                    `https://localhost:44311/api/services/app/Enclosure/GetEnclosure?id=${id}`
-                );
-                setViewEnclosure(response.data.result);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
-        if (id) {
-            fetchUser();
-        }
-    }, [id]);
+        getEnclosureById(EnclosureById.id);
+    }, []);
 
     return (
-        <Layout>
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '100vh',
-                }}
-            >
-                <h1>Enclosure Page</h1>
+        <div className={styles.background}>
+            <div className={styles.container}>
+                {EnclosureById && (
+                    <div className={styles.centerContent}>
+                        <Card className={styles.card}>
+                            <br />
+                            <Space
+                                className={styles.centerContent}
+                                direction="vertical"
+                            >
+                                <Title>Enclosure Details</Title>
+                                <Text className={styles.titleStyle} strong>
+                                    enclosureName:{'   '}
+                                    <Text className={styles.textStyle}>
+                                        {EnclosureById.enclosureName}
+                                    </Text>
+                                    {'   '}
+                                </Text>
+                                <br />
+                                <Text className={styles.titleStyle} strong>
+                                    currentCapacity:{'   '}
+                                    <Text className={styles.textStyle}>
+                                        {EnclosureById.currentCapacity}
+                                    </Text>
+                                </Text>
+                                {'   '}
+                                <br />
+                                <Text className={styles.titleStyle} strong>
+                                    maxCapacity:{'   '}
+                                    <Text className={styles.textStyle}>
+                                        {EnclosureById.maxCapacity}
+                                    </Text>
+                                </Text>{' '}
+                            </Space>
+                        </Card>
 
-                {viewEnclosure && (
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            height: '100vh',
-                        }}
-                    >
-                        <h2>Enclosure Details</h2>
-                        <p>ID: {viewEnclosure.id}</p>
-                        <p>Name: {viewEnclosure.enclosureName}</p>
-                        <p>Username: {viewEnclosure.currentCapacity}</p>
-                        <p>Email: {viewEnclosure.maxCapacity}</p>
+                        <br />
+                        <div>
+                            {' '}
+                            <Button
+                                className={styles.buttons}
+                                type="primary"
+                                href="/viewAllEnclosure"
+                            >
+                                <Link href="/viewAllEnclosure"></Link>
+                                View Enclosure
+                            </Button>
+                        </div>
                     </div>
                 )}
             </div>
-            <Link href="/viewAllEnclosure">
-                <button type="submit">View Enclosure</button>
-            </Link>
-        </Layout>
+        </div>
     );
 };
 

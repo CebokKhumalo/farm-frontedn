@@ -1,8 +1,11 @@
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Button, Table } from 'antd';
+import styles from './viewAnimal.module.css';
+import Card from 'antd/es/card/Card';
 
-const ViewAllAnimal = () => {
+const viewAllAnimal = () => {
     const [allAnimal, setAllAnimal] = useState([]);
 
     useEffect(() => {
@@ -29,39 +32,84 @@ const ViewAllAnimal = () => {
         fetchData();
     }, []);
 
-    return (
-        <div>
-            <h1>Animal List</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>animal Name</th>
-                        <th>age</th>
-                        <th></th>
-                        {/* Add more table headers for additional fields */}
-                    </tr>
-                </thead>
-                <tbody>
-                    {allAnimal.map((animal) => (
-                        <tr key={animal.id}>
-                            <td>{animal.animalName}</td>
-                            <td>{animal.age}</td>
-                            <td>
-                                <Link href={`/viewAnimal?id=${animal.id}`}>
-                                    <button>get Animal details</button>
-                                </Link>
-                            </td>
-                            {/* Add more table cells for additional fields */}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+    const columns = [
+        {
+            title: 'Animal Name',
+            dataIndex: 'animalName',
+            key: 'animalName',
+        },
+        {
+            title: 'Age',
+            dataIndex: 'age',
+            key: 'age',
+        },
+        {
+            title: 'Species Name',
+            dataIndex: 'species.speciesName',
+            key: 'species.speciesName',
+        },
+        {
+            title: 'Gender',
+            dataIndex: 'gender',
+            key: 'gender',
+            render: (gender: any) => {
+                let genderString = '';
 
-            <Link href="createAnimal">
-                <button>Create New Animal</button>
-            </Link>
+                if (gender === 1) {
+                    genderString = 'Male';
+                } else if (gender === 2) {
+                    genderString = 'Female';
+                }
+
+                return genderString;
+            },
+        },
+        {
+            title: 'Health Status',
+            dataIndex: 'healthStatus',
+            key: 'healthStatus',
+            render: (health: any) => {
+                let healthString = '';
+
+                if (health === 1) {
+                    healthString = 'healthy';
+                } else if (health === 2) {
+                    healthString = 'sick';
+                }
+
+                return healthString;
+            },
+        },
+        {
+            title: 'Details',
+            key: 'details',
+            render: (record: any) => (
+                <Link href={`/viewAnimal?id=${record.id}`}>
+                    <Button>View Details</Button>
+                </Link>
+            ),
+        },
+    ];
+
+    return (
+        <div
+            style={{
+                backgroundColor: 'rgba(185, 198, 72, 0.589)',
+            }}
+        >
+            <div className={styles.container}>
+                <Card className={styles.card}>
+                    <h1>Animal List</h1>
+                    <Table dataSource={allAnimal} columns={columns} />
+                    <Link href="/createAnimal">
+                        <Button className={styles.button}>
+                            Create New Animal
+                        </Button>
+                    </Link>
+                </Card>
+            </div>
         </div>
     );
 };
 
-export default ViewAllAnimal;
+export default viewAllAnimal;

@@ -1,19 +1,29 @@
 import axios from 'axios';
 import Link from 'next/link';
 import React, { useState } from 'react';
+import { Button, Card, Form, Input, Modal, Typography } from 'antd';
+import styles from './styles.module.css';
 
-interface User {
+const { Title } = Typography;
+
+interface Animal {
     animalName: string;
     speciesName: string;
+    gender: string;
+    healthStatus: string;
     age: number;
 }
 
 const CreateAnimal = () => {
-    const [animalData, setAnimalData] = useState<User | null>(null);
+    const [animalData, setAnimalData] = useState<Animal>({
+        animalName: '',
+        speciesName: '',
+        gender: '',
+        healthStatus: '',
+        age: 0,
+    });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-
         const { name, value } = e.target;
         setAnimalData((prevData) => ({
             ...prevData,
@@ -21,67 +31,108 @@ const CreateAnimal = () => {
         }));
     };
 
-    const handleCreate = async (e: React.FormEvent) => {
-        e.preventDefault();
-
+    const handleCreate = async () => {
         try {
             const response = await axios.post(
-                `https://localhost:44311/api/services/app/Animal/Create`,
-                animalData
+                'https://localhost:44311/api/services/app/Animal/Create',
+                animalData,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
             );
-            const newEmployee: User = response.data.result;
+            const newAnimal: Animal = response.data.result;
+            console.log('New animal created:', newAnimal);
+
+            // Show success message and refresh the page
+            Modal.success({
+                content: 'New animal created successfully!',
+                onOk: () => window.location.reload(),
+            });
+
+            // Reset the form fields after successful creation
             setAnimalData({
                 animalName: '',
                 speciesName: '',
+                gender: '',
+                healthStatus: '',
                 age: 0,
             });
-            console.log('New employee created:', newEmployee);
         } catch (error) {
+            // Show error message
+            Modal.error({
+                content: 'Failed to create new animal.',
+            });
             console.log(error);
         }
     };
 
     return (
-        <div>
-            <h1>Create New Animal</h1>
-            <form onSubmit={handleCreate}>
-                <div>
-                    <label htmlFor="animalName">Animal Name:</label>
-                    <input
-                        type="text"
-                        id="animalName"
-                        name="animalName"
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="speciesName">Species Name:</label>
-                    <input
-                        type="text"
-                        id="speciesName"
-                        name="speciesName"
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="age">Age:</label>
-                    <input
-                        type="number"
-                        id="age"
-                        name="age"
-                        onChange={handleInputChange}
-                    />
-                </div>
+        <div className={styles.background}>
+            <div className={styles.container}>
+                <Card className={styles.card}>
+                    <Title>Create New Animal</Title>
+                    <Form className={styles.cardInformation}>
+                        <Form.Item name="animalName">
+                            <Input
+                                placeholder='"Animal Name'
+                                type="text"
+                                name="animalName"
+                                value={animalData.animalName}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Item>
+                        <Form.Item name="speciesName">
+                            <Input
+                                placeholder="Species Name"
+                                type="text"
+                                name="speciesName"
+                                value={animalData.speciesName}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Item>
+                        <Form.Item name="age">
+                            <Input
+                                placeholder="Age"
+                                type="number"
+                                name="age"
+                                value={animalData.age}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Item>
 
-                <Link href="/createSpecies">
-                    <button>create Species</button>
-                </Link>
-                <Link href="/viewAllAnimal">
-                    <button>View Animal</button>
-                </Link>
+                        <Form.Item name="gender">
+                            <Input
+                                placeholder="Gender"
+                                type="text"
+                                name="gender"
+                                value={animalData.gender}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Item>
+                        <Form.Item name="healthStatus">
+                            <Input
+                                placeholder="Health Status"
+                                type="text"
+                                name="healthStatus"
+                                value={animalData.healthStatus}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Item>
+                    </Form>
 
-                <button type="submit">Create Animal</button>
-            </form>
+                    <Form.Item>
+                        <Button
+                            className={styles.buttons}
+                            type="primary"
+                            onClick={handleCreate}
+                        >
+                            Create Animal
+                        </Button>
+                    </Form.Item>
+                </Card>
+            </div>
         </div>
     );
 };

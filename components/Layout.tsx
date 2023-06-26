@@ -1,35 +1,51 @@
 import React, { ReactNode } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
+import { Layout, Menu } from 'antd';
+import styles from '../../farm-frontedn/components/styles.module.css';
+const { Header, Content, Sider } = Layout;
 
-type Props = {
-    children?: ReactNode;
-    title?: string;
+const Layouts = ({ children, title = 'This is the default title' }) => {
+    const handleLogout = () => {
+        localStorage.clear();
+    };
+    return (
+        <div className={styles.background}>
+            <Layout>
+                <Menu
+                    mode="horizontal"
+                    defaultSelectedKeys={['1']}
+                    className={`${styles.menu} menu`}
+                    // style={{ height: '50%' }}
+                >
+                    <Menu.Item key="/loginPage" className={styles.link}>
+                        <Link href="/loginPage" onClick={handleLogout}>
+                            Login
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item key={`/userPage?id=}`} className={styles.link}>
+                        <Link href={`/userPage?id=`}>View Profile</Link>
+                    </Menu.Item>
+
+                    <Menu.Item key="/viewAllEnclosure" className={styles.link}>
+                        <Link href="/viewAllEnclosure">View Enclosure</Link>
+                    </Menu.Item>
+                    <Menu.Item key="/viewAllAnimal" className={styles.link}>
+                        <Link href="/viewAllAnimal">View Animal</Link>
+                    </Menu.Item>
+                    <Menu.Item key="/viewEmployee" className={styles.link}>
+                        <Link href="/viewEmployee">View Employee</Link>
+                    </Menu.Item>
+                    <Menu.Item key="/viewAllSpecies" className={styles.link}>
+                        <Link href="/viewAllSpecies">View Species</Link>
+                    </Menu.Item>
+
+                    {/* Add more menu items for other pages */}
+                </Menu>
+                <Content>{children}</Content>
+            </Layout>
+        </div>
+    );
 };
 
-const Layout = ({ children, title = 'This is the default title' }: Props) => (
-    <div>
-        <Head>
-            <title>{title}</title>
-            <meta charSet="utf-8" />
-            <meta
-                name="viewport"
-                content="initial-scale=1.0, width=device-width"
-            />
-        </Head>
-        <header>
-            <nav>
-                <Link href="/home">Home</Link> |{' '}
-                <Link href="/userPage">About</Link>|{' '}
-                <Link href="/viewAllEnclosure">View Enclosures</Link>|{' '}
-                <Link href="/viewEmployee">View Employee</Link>|{' '}
-                <Link href="/viewAllAnimal">View Animal</Link>|{' '}
-                <a href="/loginPage">Logout</a>
-            </nav>
-        </header>
-
-        {children}
-    </div>
-);
-
-export default Layout;
+export default Layouts;
