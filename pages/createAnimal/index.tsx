@@ -83,7 +83,7 @@ const CreateAnimal = () => {
                                 onChange={handleInputChange}
                             />
                         </Form.Item>
-                        <Form.Item name="speciesName">
+                        {/* <Form.Item name="speciesName">
                             <Input
                                 placeholder="Species Name"
                                 type="text"
@@ -91,7 +91,7 @@ const CreateAnimal = () => {
                                 value={animalData.speciesName}
                                 onChange={handleInputChange}
                             />
-                        </Form.Item>
+                        </Form.Item> */}
                         <Form.Item name="age">
                             <Input
                                 placeholder="Age"

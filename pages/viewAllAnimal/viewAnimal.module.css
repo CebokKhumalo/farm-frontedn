@@ -11,7 +11,6 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    width: 100%;
 }
 
 .table {
@@ -19,17 +18,12 @@
 }
 
 .card {
-    background-color: #afc1d0;
-    width: 100%; /* Adjust the width as needed */
-    max-width: 1000px; /* Set a maximum width if desired */
+    background-color: #47789fa0;
+    /* border-color: rgba(0, 0, 0, 0); */
+    width: 80%;
+    max-width: 100%;
     margin: 0 auto;
     text-align: left;
-    padding: 20px; /* Increase the padding for more space */
-    height: 400px; /* Adjust the height as needed */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 .centerContent {
@@ -40,12 +34,11 @@
     text-align: center;
 }
 
-.titleStyle {
-    font-size: 25px;
-}
-
-.textStyle {
-    size: 15px;
+.cardInformation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .buttons {

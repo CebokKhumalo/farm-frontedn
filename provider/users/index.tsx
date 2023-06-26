@@ -92,12 +92,14 @@ const PersonProvider: FC<PropsWithChildren<any>> = ({ children }) => {
 
             if (user) {
                 const userId = user.id;
-                router.push(`/UserPage?id=${userId}`);
+                localStorage.setItem('userId', userId);
+                router.push(`/userPage?id=${userId}`);
             }
         } catch (error) {
             console.log(error);
         }
     };
+
     const getUserById = async (userId: string) => {
         try {
             const response = await axios.get(

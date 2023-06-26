@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Button, Table } from 'antd';
 import styles from './viewAnimal.module.css';
 import Card from 'antd/es/card/Card';
+import Layouts from '../../components/Layout';
 
 const viewAllAnimal = () => {
     const [allAnimal, setAllAnimal] = useState([]);
@@ -11,7 +12,6 @@ const viewAllAnimal = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = localStorage.getItem('token');
                 const response = await axios.get(
                     'https://localhost:44311/api/services/app/Animal/GetAll',
                     {
@@ -92,23 +92,25 @@ const viewAllAnimal = () => {
     ];
 
     return (
-        <div
-            style={{
-                backgroundColor: 'rgba(185, 198, 72, 0.589)',
-            }}
-        >
-            <div className={styles.container}>
-                <Card className={styles.card}>
-                    <h1>Animal List</h1>
-                    <Table dataSource={allAnimal} columns={columns} />
-                    <Link href="/createAnimal">
-                        <Button className={styles.button}>
-                            Create New Animal
-                        </Button>
-                    </Link>
-                </Card>
+        <Layouts>
+            <div
+                style={{
+                    backgroundColor: 'rgba(185, 198, 72, 0.589)',
+                }}
+            >
+                <div className={styles.container}>
+                    <Card className={styles.card}>
+                        <h1>Animal List</h1>
+                        <Table dataSource={allAnimal} columns={columns} />
+                        <Link href="/createAnimal">
+                            <Button className={styles.button}>
+                                Create New Animal
+                            </Button>
+                        </Link>
+                    </Card>
+                </div>
             </div>
-        </div>
+        </Layouts>
     );
 };
 
